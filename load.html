@@ -269,7 +269,7 @@
     </div>
 </body>
 <script>
-    let n = 1
+    let n = 0
     let list = document.querySelector('.introduction >.list')
     let button = document.querySelector('#load-button')
     button.onclick = function () {
@@ -278,7 +278,7 @@
         request.onload = function () {
             n += 1
             let response = request.responseText
-            let data = JSON.parse(response)
+            let data = window.JSON.parse(response)
             for (let i = 0; i < data.content.length; i++) {
                 let li = `
             <li>
@@ -289,32 +289,23 @@
             `
                 list.insertAdjacentHTML('beforeend', li);
             }
+            button.textContent = '加载更多...'
             if (data.hasNextPage === false) {
                 button.disabled = true
                 button.textContent = '别翻了，到底了了了！！！！！'
             }
-
         }
-        request.send()
+        if(n<2){
+            setTimeout(function(){
+                request.send()
+            },1500)
+            button.textContent = '正在努力加载...'
+        }
+        
     }
 
 
-    window.onscroll = function () {
-        var doc = document.documentElement;
-        var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-        var clientHeight = doc.clientHeight
-        var viewportOffset = button.getBoundingClientRect();
-        var buttonTop = viewportOffset.top;
-        //console.log(buttonTop)
-        //console.log(clientHeight)
-        setTimeout(function () {
-            if (buttonTop > clientHeight - 51) {
-            } else {
-                button.onclick()
-            }
-        }, 1500)
-
-    }
+    
 
 </script>
 
