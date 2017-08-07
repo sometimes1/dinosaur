@@ -169,7 +169,7 @@
 
         .load {
             text-align: center;
-            padding:30px 0;
+            padding: 30px 0;
         }
 
         #load-button {
@@ -177,7 +177,7 @@
             color: white;
             background: rgb(2, 100, 204);
             padding: 5px;
-            border-radius: 10%;
+            border-radius: 7%;
         }
     </style>
 </head>
@@ -289,13 +289,17 @@
             `
                 list.insertAdjacentHTML('beforeend', li);
             }
+            button.textContent = '加载更多...'
             if (data.hasNextPage === false) {
                 button.disabled = true
-                button.textContent = '以下没有再多的内容'
+                button.textContent = '别翻了，到底了了了！！！！！'
             }
+
         }
         request.send()
     }
+
+
     window.onscroll = function () {
         var doc = document.documentElement;
         var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
@@ -304,10 +308,13 @@
         var buttonTop = viewportOffset.top;
         //console.log(buttonTop)
         //console.log(clientHeight)
-        if (buttonTop > clientHeight - 39) {
-        } else {
-            button.onclick()
-        }
+        setTimeout(function () {
+            if (buttonTop > clientHeight - 51) {
+            } else {
+                button.onclick()
+            }
+        }, 1500)
+
     }
 
 </script>
