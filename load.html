@@ -269,16 +269,16 @@
 
     <script>
     var n = 0
-    var 正在请求 = false
+    var UnderRequest = false
     var list = document.querySelector('.introduction >.list')
     var button = document.querySelector('#load-button')
     button.onclick = function () {
-        if(正在请求){return}
+        if(UnderRequest){return}
         var request = new XMLHttpRequest()
         request.open('GET', `./page-${n + 1}.html`)
-        request.onerror = function(){正在请求 = false}
+        request.onerror = function(){UnderRequest = false}
         request.onload = function () {
-            正在请求 = false
+            UnderRequest = false
             n += 1
             var response = request.responseText
             var data = window.JSON.parse(response)
@@ -298,7 +298,7 @@
                 button.textContent = '别翻了，到底了了了！！！！！'
             }
         }
-        正在请求 = true
+        UnderRequest = true
         if(n<2){
             setTimeout(function(){
                 request.send()
