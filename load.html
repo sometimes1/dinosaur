@@ -269,12 +269,16 @@
 
     <script>
     var n = 0
+    var 正在请求 = false
     var list = document.querySelector('.introduction >.list')
     var button = document.querySelector('#load-button')
     button.onclick = function () {
+        if(正在请求){return}
         var request = new XMLHttpRequest()
         request.open('GET', `./page-${n + 1}.html`)
+        request.onerror = function(){正在请求 = false}
         request.onload = function () {
+            正在请求 = false
             n += 1
             var response = request.responseText
             var data = window.JSON.parse(response)
@@ -294,6 +298,7 @@
                 button.textContent = '别翻了，到底了了了！！！！！'
             }
         }
+        正在请求 = true
         if(n<2){
             setTimeout(function(){
                 request.send()
@@ -307,11 +312,12 @@
     window.onscroll = function () {
         var doc = document.documentElement;
         var clientHeight = doc.clientHeight
+        var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
         var viewportOffset = button.getBoundingClientRect();
         var buttonTop = viewportOffset.top;
         //console.log(buttonTop)
         //console.log(clientHeight)
-            if (buttonTop > clientHeight - 35) {
+            if (buttonTop > clientHeight -35) {
             } else {
                 button.onclick()
             }
