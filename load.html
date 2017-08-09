@@ -268,18 +268,18 @@
     </div>
 
     <script>
-    let n = 0
-    let list = document.querySelector('.introduction >.list')
-    let button = document.querySelector('#load-button')
+    var n = 0
+    var list = document.querySelector('.introduction >.list')
+    var button = document.querySelector('#load-button')
     button.onclick = function () {
-        let request = new XMLHttpRequest()
+        var request = new XMLHttpRequest()
         request.open('GET', `./page-${n + 1}.html`)
         request.onload = function () {
             n += 1
-            let response = request.responseText
-            let data = window.JSON.parse(response)
-            for (let i = 0; i < data.content.length; i++) {
-                let li = `
+            var response = request.responseText
+            var data = window.JSON.parse(response)
+            for (var i = 0; i < data.content.length; i++) {
+                var li = `
             <li>
                 <img src="${data.content[i].url}">
                 <h3>${data.content[i].title}</h3>
@@ -306,12 +306,11 @@
 
     window.onscroll = function () {
         var doc = document.documentElement;
-        var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
         var clientHeight = doc.clientHeight
         var viewportOffset = button.getBoundingClientRect();
         var buttonTop = viewportOffset.top;
-        console.log(buttonTop)
-        console.log(clientHeight)
+        //console.log(buttonTop)
+        //console.log(clientHeight)
             if (buttonTop > clientHeight - 37) {
             } else {
                 button.onclick()
