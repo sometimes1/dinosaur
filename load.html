@@ -266,8 +266,8 @@
     <div class="load">
         <button id="load-button">加载更多...</button>
     </div>
-</body>
-<script>
+
+    <script>
     let n = 0
     let list = document.querySelector('.introduction >.list')
     let button = document.querySelector('#load-button')
@@ -310,8 +310,8 @@
         var clientHeight = doc.clientHeight
         var viewportOffset = button.getBoundingClientRect();
         var buttonTop = viewportOffset.top;
-        //console.log(buttonTop)
-        //console.log(clientHeight)
+        console.log(buttonTop)
+        console.log(clientHeight)
             if (buttonTop > clientHeight - 36) {
             } else {
                 button.onclick()
@@ -320,5 +320,7 @@
     }
 
 </script>
+</body>
+
 
 </html>
