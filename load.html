@@ -269,23 +269,25 @@
 
     <script>
     var n = 0
-    var UnderRequest = false
+    let hasNext = true
+    var underRequest = false
     var list = document.querySelector('.introduction >.list')
     var button = document.querySelector('#load-button')
     button.onclick = function () {
-        if(UnderRequest){return}
+        if(underRequest){return}
+        if(!hasNext){return}
         var request = new XMLHttpRequest()
         request.open('GET', `./page-${n + 1}.html`)
         request.onerror = function(){UnderRequest = false}
         request.onload = function () {
-            UnderRequest = false
+            underRequest = false
             n += 1
             var response = request.responseText
             var data = window.JSON.parse(response)
             for (var i = 0; i < data.content.length; i++) {
                 var li = `
             <li>
-                <img src="${data.content[i].url}">
+                <img src="//i.loli.net/2017/08/08/5989307b6c87b.gif" xxx="${data.content[i].url}">
                 <h3>${data.content[i].title}</h3>
                 <p>${data.content[i].text}</p>
             </li>
@@ -294,11 +296,11 @@
             }
             button.textContent = '加载更多>>'
             if (data.hasNextPage === false) {
-                button.disabled = true
+                hasNext = false
                 button.textContent = '别翻了，到底了了了！！！！！'
             }
         }
-        UnderRequest = true
+        underRequest = true
         if(n<2){
             setTimeout(function(){
                 request.send()
@@ -308,21 +310,35 @@
         
     }
 
+function onScreen(element){
+  var doc = document.documentElement;
+  var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+  var clientHeight = doc.clientHeight
+  var viewportOffset = element.getBoundingClientRect();
+  // these are relative to the viewport, i.e. the window
+  var buttonTop = viewportOffset.top;
+  if(buttonTop < clientHeight -35){
+    return true
+  }else{
+    return false
+  }
+}
 
-    window.onscroll = function () {
-        var doc = document.documentElement;
-        var clientHeight = doc.clientHeight
-        var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-        var viewportOffset = button.getBoundingClientRect();
-        var buttonTop = viewportOffset.top;
-        //console.log(buttonTop)
-        //console.log(clientHeight)
-            if (buttonTop > clientHeight -35) {
-            } else {
-                button.onclick()
-            }
+window.onscroll = function(){
+  if(onScreen(button) === true){
+    if(hasNext){ button.onclick() }
+  }
 
+  let images = document.querySelectorAll('img[xxx]')
+  for(let i = 0; i <images.length; i++){
+    if(onScreen(images[i])){
+      images[i].src = images[i].getAttribute('xxx')
+      images[i].removeAttribute('xxx')
     }
+  }
+}
+
+
 
 </script>
 </body>
