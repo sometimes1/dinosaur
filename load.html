@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>恐龙</title>
+    <link rel="prefetch" href="//i.loli.net/2017/08/08/5989307b6c87b.gif">
     <style>
         * {
             box-sizing: border-box;
@@ -268,79 +269,77 @@
     </div>
 
     <script>
-    var n = 0
-    let hasNext = true
-    var underRequest = false
-    var list = document.querySelector('.introduction >.list')
-    var button = document.querySelector('#load-button')
-    button.onclick = function () {
-        if(underRequest){return}
-        if(!hasNext){return}
-        var request = new XMLHttpRequest()
-        request.open('GET', `./page-${n + 1}.html`)
-        request.onerror = function(){UnderRequest = false}
-        request.onload = function () {
-            underRequest = false
-            n += 1
-            var response = request.responseText
-            var data = window.JSON.parse(response)
-            for (var i = 0; i < data.content.length; i++) {
-                var li = `
+        var n = 0
+        let hasNext = true
+        var underRequest = false
+        var list = document.querySelector('.introduction >.list')
+        var button = document.querySelector('#load-button')
+        button.onclick = function () {
+            if (underRequest) { return }
+            if (!hasNext) { return }
+            var request = new XMLHttpRequest()
+            request.open('GET', `./page-${n + 1}.html`)
+            request.onerror = function () { UnderRequest = false }
+            request.onload = function () {
+                underRequest = false
+                n += 1
+                var response = request.responseText
+                var data = window.JSON.parse(response)
+                for (var i = 0; i < data.content.length; i++) {
+                    var li = `
             <li>
                 <img src="//i.loli.net/2017/08/08/5989307b6c87b.gif" xxx="${data.content[i].url}">
                 <h3>${data.content[i].title}</h3>
                 <p>${data.content[i].text}</p>
             </li>
             `
-                list.insertAdjacentHTML('beforeend', li);
+                    list.insertAdjacentHTML('beforeend', li);
+                }
+                button.textContent = '加载更多>>'
+                if (data.hasNextPage === false) {
+                    hasNext = false
+                    button.textContent = '别翻了，到底了了了！！！！！'
+                }
             }
-            button.textContent = '加载更多>>'
-            if (data.hasNextPage === false) {
-                hasNext = false
-                button.textContent = '别翻了，到底了了了！！！！！'
+            underRequest = true
+            if (n < 2) {
+                setTimeout(function () {
+                    request.send()
+                }, 1500)
+                button.textContent = '正在努力加载...'
+            }
+
+        }
+
+        function onScreen(element) {
+            var doc = document.documentElement;
+            var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+            var clientHeight = doc.clientHeight
+            var viewportOffset = element.getBoundingClientRect();
+            // these are relative to the viewport, i.e. the window
+            var buttonTop = viewportOffset.top;
+            if (buttonTop < clientHeight - 35) {
+                return true
+            } else {
+                return false
             }
         }
-        underRequest = true
-        if(n<2){
-            setTimeout(function(){
-                request.send()
-            },1500)
-            button.textContent = '正在努力加载...'
+
+        window.onscroll = function () {
+            if (onScreen(button) === true) {
+                if (hasNext) { button.onclick() }
+            }
+
+            let images = document.querySelectorAll('img[xxx]')
+            for (let i = 0; i < images.length; i++) {
+                if (onScreen(images[i])) {
+                    images[i].src = images[i].getAttribute('xxx')
+                    images[i].removeAttribute('xxx')
+                }
+            }
         }
-        
-    }
 
-function onScreen(element){
-  var doc = document.documentElement;
-  var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
-  var clientHeight = doc.clientHeight
-  var viewportOffset = element.getBoundingClientRect();
-  // these are relative to the viewport, i.e. the window
-  var buttonTop = viewportOffset.top;
-  if(buttonTop < clientHeight -35){
-    return true
-  }else{
-    return false
-  }
-}
-
-window.onscroll = function(){
-  if(onScreen(button) === true){
-    if(hasNext){ button.onclick() }
-  }
-
-  let images = document.querySelectorAll('img[xxx]')
-  for(let i = 0; i <images.length; i++){
-    if(onScreen(images[i])){
-      images[i].src = images[i].getAttribute('xxx')
-      images[i].removeAttribute('xxx')
-    }
-  }
-}
-
-
-
-</script>
+    </script>
 </body>
 
 
